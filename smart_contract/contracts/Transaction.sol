@@ -1,36 +1,35 @@
-// SPDX-License-Identifier: UNLICENSEDs 
+// SPDX-License-Identifier: UNLICENSED
+
 pragma solidity ^0.8.0;
 
-contract Transaction {
-
+contract Transactions {
     uint256 transactionCount;
 
-    event Transfer(address sender, address recevier, uint amount, string message, uint256 timestamp, string keywords);
-
+    event Transfer(address from, address receiver, uint amount, string message, uint256 timestamp, string keyword);
+  
     struct TransferStruct {
         address sender;
-        address recevier;
+        address receiver;
         uint amount;
         string message;
         uint256 timestamp;
-        string keywords;
+        string keyword;
     }
 
     TransferStruct[] transactions;
 
-    // Add To Blockchain
-    function addToBlockChain(address payable recevier, uint amount, string memory message, uint256 timestamp, string memory keywords) public {
-        transactionCount++;
-        transactions.push(TransferStruct(msg.sender, recevier, amount, message, block.timestamp, keywords));
+    function addToBlockchain(address payable receiver, uint amount, string memory message, string memory keyword) public {
+        transactionCount += 1;
+        transactions.push(TransferStruct(msg.sender, receiver, amount, message, block.timestamp, keyword));
+
+        emit Transfer(msg.sender, receiver, amount, message, block.timestamp, keyword);
     }
 
-    // Get All the Transactions
     function getAllTransactions() public view returns (TransferStruct[] memory) {
         return transactions;
     }
 
-    // Get Transaction count
-    function getTransactionCount() public view returns(uint) {
+    function getTransactionCount() public view returns (uint256) {
         return transactionCount;
     }
 }
